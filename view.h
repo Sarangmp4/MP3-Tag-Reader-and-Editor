@@ -4,7 +4,7 @@
 
 #include "header.h"
 
-void view (mp3file *mpFile);
+int view(int argc, char *argv[],mp3file *mpFile);
 int hexa_to_decimal( char *ch );
 
 #endif

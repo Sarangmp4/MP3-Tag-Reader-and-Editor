@@ -1,8 +1,60 @@
 #include "header.h"
 #include "view.h"
 
-void view(mp3file *mpFile)
+int view(int argc, char *argv[], mp3file *mpFile)
 {
+
+  if (strcmp(argv[1], "-v") == 0 && argc == 3) // for viewing
+  {
+    if (strstr(argv[2], ".mp3")) // for .mp3 extension
+    {
+
+      strcpy(mpFile->file_name, argv[2]); // copying mp3 name
+
+      mpFile->file_fptr = fopen(mpFile->file_name, "r"); // opening file
+
+      if (mpFile->file_fptr != NULL) // if file is opened
+      {
+        // checking it is ID3
+        char check[4];
+        for (int i = 0; i < 3; i++)
+        {
+          check[i] = fgetc(mpFile->file_fptr);
+        }
+        check[4] = '\0'; // last null character
+
+        // printf("chek is %s\n",check);
+
+        if (strcmp(check, "ID3") == 0)
+        {
+          printf("ID3 success\n");
+
+          char buffer[2];
+          fread(buffer, 1, 2,mpFile->file_fptr);
+          if (buffer[0] == 3 && buffer[1] == 0)
+          {
+            printf("mp3 is Version 2\n");
+          }
+        }
+        else
+        {
+          printf("ID3 is not success");
+          return FAILURE;
+        }
+      }
+      else
+      {
+        printf("file is not opened\n");
+      }
+    }
+    else // mp3 extension not found
+    {
+      printf("mp3 not found\n");
+      return FAILURE;
+    }
+  }
+
+  /*skipping header*/
   fseek(mpFile->file_fptr, 10, SEEK_SET);
   // printf("pos is %d\n",ftell(mpFile->file_fptr));
   printf("\n----------------------- WELCOME TO VIEW LOG ---------------------\n");
@@ -47,8 +99,8 @@ void view(mp3file *mpFile)
     {
       while (data[i] != '\0')
       {
-        if(data[i] >=0 && data[i] < 128)
-        printf("%c", data[i]);
+        if (data[i] >= 0 && data[i] < 128)
+          printf("%c", data[i]);
         i++;
       }
     }
