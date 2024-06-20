@@ -1,5 +1,6 @@
 #include "header.h"
 #include "view.h"
+#include "edit.h"
 
 operation check_operation(int argc, char *argv[]);
 
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
   else if (check_operation(argc, argv) == edit_v)
   {
     // call edit function
+    edit(argc,argv,&mfile);
   }
   else if (check_operation(argc, argv) == help_v)
   {
@@ -47,8 +49,7 @@ operation check_operation(int argc, char *argv[])
 // validation function
 int validation(int argc, char *argv[], mp3file *mfile)
 {
-  if (argc > 1)
-  {
+  
     if (strcmp(argv[1], "-v") == 0 && argc == 3) // for viewing
     {
       if (strstr(argv[2], ".mp3")) // for .mp3 extension
@@ -99,9 +100,5 @@ int validation(int argc, char *argv[], mp3file *mfile)
         return FAILURE;
       }
     }
-  }
-  else
-  {
-    printf("Please pass CLA\n");
-  }
+ 
 }
